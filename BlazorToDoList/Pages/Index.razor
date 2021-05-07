@@ -1,6 +1,33 @@
 ﻿@page "/"
 
-    <div class=""></div>
-    <h1>Welcome to Blazor To-Do App</h1>
+<div class="container text-center">
+    <h1 class="">Welcome to Blazor To-Do App</h1>
+    <h3>Your undone todos count: @todos.Count(todo => !todo.IsDone)</h3>
+    <div>
+        @foreach (var todo in todos)
+        {
+            @if (todo.IsDone) { isDone = "color:green; text-decoration:line-through"; } else { isDone = ""; }
+            <div style="margin:0.5rem;flex-direction:row">
+                <input type="checkbox" @bind="todo.IsDone" />
+                <input type="text" @bind="todo.Title" style="@isDone" />
+            </div>
+        }
+    </div>
+    <input placeholder="Something todo" @bind="newToDo" />
+    <button @onclick="AddTodo">Add todo</button>
+</div>
 
+@code {
+    private List<TodoItem> todos = new();
+    private String newToDo;
+    private String isDone;
 
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newToDo))
+        {
+            todos.Add(new TodoItem { Title = newToDo });
+            newToDo = string.Empty;
+        }
+    }
+} 
